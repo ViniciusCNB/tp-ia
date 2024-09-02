@@ -1,1 +1,1 @@
-# tp-ia
+# Trabalho Prático - Inteligência Artificial
