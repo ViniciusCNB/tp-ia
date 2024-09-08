@@ -2,7 +2,7 @@ import constants
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-from utils import load_map_from_file
+from utils import aestrela, load_map_from_file
 
 prison_map = load_map_from_file('prison_map.txt', constants.terrain_mapping)
 
@@ -21,3 +21,8 @@ def plot_map(prison_map):
     plt.show()
 
 plot_map(prison_map)
+
+# Teste A* com a posição do Rick e do Carl
+caminho = aestrela(prison_map, (20, 12), (5, 32))
+
+print(caminho)

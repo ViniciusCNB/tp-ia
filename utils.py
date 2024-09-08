@@ -1,6 +1,6 @@
-import heapq
 import numpy as np
-from constants import EDIFICIO
+from queue import PriorityQueue
+
 
 def load_map_from_file(filename, terrain_mapping):
     with open(filename, 'r') as file:
@@ -16,47 +16,65 @@ def load_map_from_file(filename, terrain_mapping):
     return map_matrix
 
 
-def heuristic(a, b):
-    # Distância Manhattan
-    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+def h_score(atual, destino):
+    # Função heurística: distância Manhattan 
+    return abs(atual[0] - destino[0]) + abs(atual[1] - destino[1])
 
 
-def a_star_search(map, start, goal):
-    # Inicializando a fronteira com o nó de início
-    frontier = []
-    heapq.heappush(frontier, (0, start))
+def aestrela(matriz, inicio, destino):
+    rows = len(matriz)
+    cols = len(matriz[0])
     
-    came_from = {}
-    cost_so_far = {}
-    came_from[start] = None
-    cost_so_far[start] = 0
+    # Inicializar f_score e g_score com valores infinitos
+    f_score = { (i, j): float('inf') for i in range(rows) for j in range(cols) }
+    g_score = { (i, j): float('inf') for i in range(rows) for j in range(cols) }
     
-    while frontier:
-        current_cost, current = heapq.heappop(frontier)
-        
-        if current == goal:
+    # Configurar valores iniciais
+    g_score[inicio] = 0
+    f_score[inicio] = h_score(inicio, destino)
+    
+    # Inicializar a fila de prioridade
+    fila = PriorityQueue()
+    fila.put((f_score[inicio], inicio))
+    
+    # Para armazenar o caminho
+    caminho = {}
+    
+    while not fila.empty():
+        _, atual = fila.get()
+
+        # Verifica se o destino foi alcançado
+        if atual == destino:
             break
+
+        # Explorar vizinhos (cima, baixo, esquerda, direita)
+        vizinhos = [
+            (atual[0] - 1, atual[1]), # cima
+            (atual[0] + 1, atual[1]), # baixo
+            (atual[0], atual[1] - 1), # esquerda
+            (atual[0], atual[1] + 1)  # direita
+        ]
         
-        for next in get_neighbors(map, current):
-            new_cost = cost_so_far[current] + map[next[0]][next[1]]
-            if next not in cost_so_far or new_cost < cost_so_far[next]:
-                cost_so_far[next] = new_cost
-                priority = new_cost + heuristic(goal, next)
-                heapq.heappush(frontier, (priority, next))
-                came_from[next] = current
-    
-    return came_from, cost_so_far
+        for vizinho in vizinhos:
+            linha, coluna = vizinho
+            # Verificar se a posição do vizinho é válida e acessível
+            if 0 <= linha < rows and 0 <= coluna < cols and matriz[linha][coluna] != float('inf'):
+                # Calcular g_score do vizinho
+                custo = matriz[linha][coluna]
+                novo_g_score = g_score[atual] + custo
+                
+                if novo_g_score < g_score[vizinho]:
+                    g_score[vizinho] = novo_g_score
+                    f_score[vizinho] = novo_g_score + h_score(vizinho, destino)
+                    fila.put((f_score[vizinho], vizinho))
+                    caminho[vizinho] = atual
 
+    # Reconstruir o caminho do destino ao início
+    caminho_final = {}
+    celula_analisada = destino
+    if celula_analisada in caminho:
+        while celula_analisada != inicio:
+            caminho_final[caminho[celula_analisada]] = celula_analisada
+            celula_analisada = caminho[celula_analisada]
 
-def get_neighbors(map, current):
-    neighbors = []
-    x, y = current
-    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # Movimentos verticais e horizontais
-    
-    for dx, dy in directions:
-        nx, ny = x + dx, y + dy
-        if 0 <= nx < map.shape[0] and 0 <= ny < map.shape[1]:
-            if map[nx, ny] != EDIFICIO:  # Rick não pode atravessar edifícios
-                neighbors.append((nx, ny))
-    
-    return neighbors
+    return caminho_final
