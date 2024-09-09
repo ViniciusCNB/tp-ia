@@ -11,14 +11,13 @@ pontos_a_visitar = [rick_position, carl_position, daryl_position, glen_position,
 
 caminho, custo = encontrar_caminho(prison_map, pontos_a_visitar)
 
+print(f'> Custo total do caminho encontrado: {custo}')
+trace_path(caminho)
+
 # Marca o caminho no mapa
 mark_path_on_map(prison_map, caminho)
 
 # Plota o mapa com o caminho
 plot_map(prison_map)
 
-print(f'> Custo total do caminho encontrado: {custo}')
-print(caminho)
 
-# Printa os passos do caminho
-trace_path(caminho)

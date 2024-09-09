@@ -109,7 +109,7 @@ def encontrar_caminho(prison_map, pontos):
 # Plota a matriz do mapa como um heatmap usando matplotlib e seaborn, com cores personalizadas.
 def plot_map(prison_map, caminho=None):
     # Definir o mapeamento de cores de acordo com os valores
-    colors = ['yellow', 'darkgray', 'brown', 'green', 'lightgray', 'blue']  # cores para os valores
+    colors = ['yellow', '#7f7f7f', '#948a54', '#9bbb59','#d9d9d9', '#d9d9d9']  # cores para os valores
     cmap = ListedColormap(colors)
 
     # Definir os limites para o colorbar (cada limite corresponde a uma cor)
@@ -118,7 +118,7 @@ def plot_map(prison_map, caminho=None):
 
     # Plota o mapa com o colormap personalizado
     plt.figure(figsize=(20, 20))  # Define o tamanho do gráfico
-    sns.heatmap(prison_map, cmap=cmap, annot=True, cbar=True, square=True, linewidths=0.5, linecolor='black',
+    sns.heatmap(prison_map, cmap=cmap, annot=True, cbar=False, square=True, linewidths=0.5, linecolor='black',
                 norm=norm, cbar_kws={'ticks': [-1, 1, 3, 5, 10]})  # Define os ticks do colorbar
 
     plt.title("Mapa de Prisão com Custos e Cores Personalizadas")
