@@ -80,7 +80,30 @@ def aestrela(matriz, inicio, destino):
             caminho_final[caminho[celula_analisada]] = celula_analisada
             celula_analisada = caminho[celula_analisada]
 
-    return caminho_final
+    # Retornar tanto o caminho quanto o custo total do caminho
+    custo_total = g_score[destino] if destino in g_score else float('inf')
+    return caminho_final, custo_total
+
+
+def encontrar_caminho(prison_map, pontos):
+    caminho_completo = {}
+    custo_total = 0
+    
+
+    # Itera sobre os pontos na ordem especificada
+    for i in range(len(pontos) - 1):
+        ponto_inicial = pontos[i]
+        ponto_final = pontos[i + 1]
+
+        # Chama a função A* para cada trecho entre os pontos consecutivos
+        trecho, custo = aestrela(prison_map, ponto_inicial, ponto_final)
+
+        # Adiciona o trecho ao caminho completo
+        # O trecho é um dicionário onde a chave é a célula atual e o valor é a célula anterior
+        caminho_completo.update(trecho)
+        custo_total += custo
+        
+    return caminho_completo, custo_total
 
 
 # Plota a matriz do mapa como um heatmap usando matplotlib e seaborn, com cores personalizadas.
