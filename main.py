@@ -1,5 +1,5 @@
 from constants import carl_position, daryl_position, exit_position, glen_position, maggie_position, rick_position, terrain_mapping
-from utils import load_map_from_file, plot_map, mark_path_on_map, encontrar_caminho
+from utils import load_map_from_file, plot_map, mark_path_on_map, encontrar_caminho, trace_path
 
 prison_map = load_map_from_file('prison_map.txt', terrain_mapping)
 
@@ -19,3 +19,6 @@ plot_map(prison_map)
 
 print(f'> Custo total do caminho encontrado: {custo}')
 print(caminho)
+
+# Printa os passos do caminho
+trace_path(caminho)

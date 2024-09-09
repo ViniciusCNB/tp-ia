@@ -109,7 +109,7 @@ def encontrar_caminho(prison_map, pontos):
 # Plota a matriz do mapa como um heatmap usando matplotlib e seaborn, com cores personalizadas.
 def plot_map(prison_map, caminho=None):
     # Definir o mapeamento de cores de acordo com os valores
-    colors = ['yellow','darkgray', 'brown', 'green', 'lightgray', 'blue']  # cores para os valores
+    colors = ['yellow', 'darkgray', 'brown', 'green', 'lightgray', 'blue']  # cores para os valores
     cmap = ListedColormap(colors)
 
     # Definir os limites para o colorbar (cada limite corresponde a uma cor)
@@ -129,3 +129,27 @@ def plot_map(prison_map, caminho=None):
 def mark_path_on_map(prison_map, path):
     for (x, y) in path:
         prison_map[x][y] = -1
+
+
+def trace_path(path_dict):
+    # Encontrar o ponto de partida: aquele que não é valor de nenhum par
+    start = None
+    for key in path_dict:
+        if key not in path_dict.values():
+            start = key
+            break
+
+    # Caso não encontre um ponto inicial
+    if start is None:
+        print("Caminho inválido: não foi possível encontrar um ponto inicial.")
+        return
+
+    # Traçar o caminho
+    path = [start]
+    while start in path_dict:
+        start = path_dict[start]
+        path.append(start)
+
+    # Exibir o caminho de forma legível
+    for i, step in enumerate(path):
+        print(f"Passo {i + 1}: {step}")
