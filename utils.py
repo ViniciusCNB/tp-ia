@@ -1,5 +1,8 @@
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 from queue import PriorityQueue
+from matplotlib.colors import ListedColormap
 
 
 def load_map_from_file(filename, terrain_mapping):
@@ -78,3 +81,28 @@ def aestrela(matriz, inicio, destino):
             celula_analisada = caminho[celula_analisada]
 
     return caminho_final
+
+
+# Plota a matriz do mapa como um heatmap usando matplotlib e seaborn, com cores personalizadas.
+def plot_map(prison_map, caminho=None):
+    # Definir o mapeamento de cores de acordo com os valores
+    colors = ['yellow','darkgray', 'brown', 'green', 'lightgray', 'blue']  # cores para os valores
+    cmap = ListedColormap(colors)
+
+    # Definir os limites para o colorbar (cada limite corresponde a uma cor)
+    bounds = [-1, 1, 3, 5, 10, float('inf')]  # limites baseados nos valores
+    norm = plt.Normalize(vmin= -1, vmax=10)  # Normaliza os valores de 0 a 10
+
+    # Plota o mapa com o colormap personalizado
+    plt.figure(figsize=(20, 20))  # Define o tamanho do gráfico
+    sns.heatmap(prison_map, cmap=cmap, annot=True, cbar=True, square=True, linewidths=0.5, linecolor='black',
+                norm=norm, cbar_kws={'ticks': [-1, 1, 3, 5, 10]})  # Define os ticks do colorbar
+
+    plt.title("Mapa de Prisão com Custos e Cores Personalizadas")
+    plt.show()
+
+
+# Função para marcar o caminho no mapa
+def mark_path_on_map(prison_map, path):
+    for (x, y) in path:
+        prison_map[x][y] = -1
