@@ -15,9 +15,9 @@ terrain_mapping = {
 }
 
 # Posições dos personagens e saída
-rick_position = (21, 13)  # Posição de início - Refeitório
-carl_position = (6, 33)
-daryl_position = (36, 36)
-glen_position = (33, 9)
-maggie_position = (14, 32)
-exit_position = (41, 13)  # Porta de saída
+rick_position = (20, 12)  # Posição de início - Refeitório
+carl_position = (5, 32)
+daryl_position = (35, 35)
+glen_position = (32, 8)
+maggie_position = (13, 31)
+exit_position = (41, 21)  # Porta de saída
