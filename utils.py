@@ -5,7 +5,7 @@ from queue import PriorityQueue
 from matplotlib.colors import ListedColormap
 
 
-def carregar_mapa_de_arquivo(nome_arquivo, mapeamento_do_terreno):
+def carregar_mapa_a_partir_do_txt(nome_arquivo, mapeamento_do_terreno):
     with open(nome_arquivo, 'r') as arquivo:
         linhas = arquivo.readlines()
         
@@ -116,8 +116,15 @@ def criar_mapa(mapa_prisao):
 
     # Plota o mapa com o colormap personalizado
     plt.figure(figsize=(20, 20))  # Define o tamanho do gráfico
-    sns.heatmap(mapa_prisao, cmap=cmap, annot=True, cbar=False, square=True, linewidths=0.5, linecolor='black',
-                norm=norm, cbar_kws={'ticks': [-1, 1, 3, 5, 10]})  # Define os ticks do colorbar
+    sns.heatmap(mapa_prisao, 
+                cmap=cmap,
+                annot=True, 
+                cbar=False, 
+                square=True, 
+                linewidths=0.5, 
+                linecolor='black',
+                norm=norm, 
+                annot_kws={'fontsize': 7})  # Define os ticks do colorbar
 
     plt.title("Mapa da Prisão")
     plt.show()
