@@ -5,18 +5,18 @@ from queue import PriorityQueue
 from matplotlib.colors import ListedColormap
 
 
-def load_map_from_file(filename, terrain_mapping):
-    with open(filename, 'r') as file:
-        lines = file.readlines()
+def carregar_mapa_de_arquivo(nome_arquivo, mapeamento_do_terreno):
+    with open(nome_arquivo, 'r') as arquivo:
+        linhas = arquivo.readlines()
         
     # Inicializa a matriz do mapa
-    map_matrix = np.zeros((len(lines), len(lines[0].strip())), dtype=float)
+    matriz_do_mapa = np.zeros((len(linhas), len(linhas[0].strip())), dtype=float)
     
-    for i, line in enumerate(lines):
-        for j, char in enumerate(line.strip()):
-            map_matrix[i, j] = terrain_mapping[char]
+    for i, linha in enumerate(linhas):
+        for j, char in enumerate(linha.strip()):
+            matriz_do_mapa[i, j] = mapeamento_do_terreno[char]
     
-    return map_matrix
+    return matriz_do_mapa
 
 
 def h_score(atual, destino):
@@ -24,7 +24,7 @@ def h_score(atual, destino):
     return abs(atual[0] - destino[0]) + abs(atual[1] - destino[1])
 
 
-def aestrela(matriz, inicio, destino):
+def a_estrela(matriz, inicio, destino):
     rows = len(matriz)
     cols = len(matriz[0])
     
@@ -85,18 +85,17 @@ def aestrela(matriz, inicio, destino):
     return caminho_final, custo_total
 
 
-def encontrar_caminho(prison_map, pontos):
+def encontrar_caminho(mapa_prisao, pontos):
     caminho_completo = {}
     custo_total = 0
     
-
     # Itera sobre os pontos na ordem especificada
     for i in range(len(pontos) - 1):
         ponto_inicial = pontos[i]
         ponto_final = pontos[i + 1]
 
         # Chama a função A* para cada trecho entre os pontos consecutivos
-        trecho, custo = aestrela(prison_map, ponto_inicial, ponto_final)
+        trecho, custo = a_estrela(mapa_prisao, ponto_inicial, ponto_final)
 
         # Adiciona o trecho ao caminho completo
         # O trecho é um dicionário onde a chave é a célula atual e o valor é a célula anterior
@@ -107,49 +106,49 @@ def encontrar_caminho(prison_map, pontos):
 
 
 # Plota a matriz do mapa como um heatmap usando matplotlib e seaborn, com cores personalizadas.
-def plot_map(prison_map, caminho=None):
+def criar_mapa(mapa_prisao):
     # Definir o mapeamento de cores de acordo com os valores
-    colors = ['yellow', '#7f7f7f', '#948a54', '#9bbb59','#d9d9d9', '#d9d9d9']  # cores para os valores
-    cmap = ListedColormap(colors)
+    cores = ['yellow', '#7f7f7f', '#948a54', '#9bbb59','#d9d9d9', '#d9d9d9']  # cores para os valores
+    cmap = ListedColormap(cores)
 
     # Definir os limites para o colorbar (cada limite corresponde a uma cor)
-    bounds = [-1, 1, 3, 5, 10, float('inf')]  # limites baseados nos valores
     norm = plt.Normalize(vmin= -1, vmax=10)  # Normaliza os valores de 0 a 10
 
     # Plota o mapa com o colormap personalizado
     plt.figure(figsize=(20, 20))  # Define o tamanho do gráfico
-    sns.heatmap(prison_map, cmap=cmap, annot=True, cbar=False, square=True, linewidths=0.5, linecolor='black',
+    sns.heatmap(mapa_prisao, cmap=cmap, annot=True, cbar=False, square=True, linewidths=0.5, linecolor='black',
                 norm=norm, cbar_kws={'ticks': [-1, 1, 3, 5, 10]})  # Define os ticks do colorbar
 
-    plt.title("Mapa de Prisão com Custos e Cores Personalizadas")
+    plt.title("Mapa da Prisão")
     plt.show()
 
 
 # Função para marcar o caminho no mapa
-def mark_path_on_map(prison_map, path):
-    for (x, y) in path:
-        prison_map[x][y] = -1
+def marcar_caminho(mapa_prisao, caminho):
+    for (x, y) in caminho:
+        mapa_prisao[x][y] = -1
 
 
-def trace_path(path_dict):
+# Função para traduzir o retorno do encontrar_caminho
+def traduzir_caminho(dict_caminho):
     # Encontrar o ponto de partida: aquele que não é valor de nenhum par
-    start = None
-    for key in path_dict:
-        if key not in path_dict.values():
-            start = key
+    inicio = None
+    for chave in dict_caminho:
+        if chave not in dict_caminho.values():
+            inicio = chave
             break
 
     # Caso não encontre um ponto inicial
-    if start is None:
+    if inicio is None:
         print("Caminho inválido: não foi possível encontrar um ponto inicial.")
         return
 
     # Traçar o caminho
-    path = [start]
-    while start in path_dict:
-        start = path_dict[start]
-        path.append(start)
+    caminho = [inicio]
+    while inicio in dict_caminho:
+        inicio = dict_caminho[inicio]
+        caminho.append(inicio)
 
     # Exibir o caminho de forma legível
-    for i, step in enumerate(path):
-        print(f"Passo {i + 1}: {step}")
+    for i, passo in enumerate(caminho):
+        print(f"Passo {i + 1}: {passo}")
