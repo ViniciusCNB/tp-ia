@@ -85,11 +85,77 @@ def a_estrela(matriz, inicio, destino):
     return caminho_final, custo_total
 
 
+# def encontrar_caminho(mapa_prisao, pontos):
+#     caminho_completo = {}
+#     custo_total = 0
+    
+#     # Itera sobre os pontos na ordem especificada
+#     for i in range(len(pontos) - 1):
+#         ponto_inicial = pontos[i]
+#         ponto_final = pontos[i + 1]
+
+#         # Chama a função A* para cada trecho entre os pontos consecutivos
+#         trecho, custo = a_estrela(mapa_prisao, ponto_inicial, ponto_final)
+
+#         # Adiciona o trecho ao caminho completo
+#         # O trecho é um dicionário onde a chave é a célula atual e o valor é a célula anterior
+#         caminho_completo.update(trecho)
+#         custo_total += custo
+        
+#     return caminho_completo, custo_total
+
+
+# def encontrar_caminho(mapa_prisao, pontos):
+#     caminho_completo = {}
+#     custo_total = 0
+    
+#     for i in range(len(pontos) - 1):
+#         ponto_inicial = pontos[i]
+#         ponto_final = pontos[i + 1]
+
+#         # Chama a função A* para cada trecho entre os pontos consecutivos
+#         trecho, custo = a_estrela(mapa_prisao, ponto_inicial, ponto_final)
+
+#         # Adiciona o trecho ao caminho completo
+#         caminho_completo.update(trecho)
+#         custo_total += custo
+        
+#         # Marca o caminho e cria o mapa
+#         mapa_com_caminho = mapa_prisao.copy()  # Cria uma cópia do mapa
+#         marcar_caminho(mapa_com_caminho, trecho)
+#         criar_mapa(mapa_com_caminho, f"Mapa do caminho de {ponto_inicial} até {ponto_final}")
+        
+#     return caminho_completo, custo_total
+
+
+# def encontrar_caminho(mapa_prisao, pontos):
+#     caminho_completo = {}
+#     custo_total = 0
+    
+#     for i in range(len(pontos) - 1):
+#         ponto_inicial = pontos[i]
+#         ponto_final = pontos[i + 1]
+
+#         # Chama a função A* para cada trecho entre os pontos consecutivos
+#         trecho, custo = a_estrela(mapa_prisao, ponto_inicial, ponto_final)
+
+#         # Adiciona o trecho ao caminho completo
+#         caminho_completo.update(trecho)
+#         custo_total += custo
+        
+#         # Marca o caminho e cria o mapa
+#         mapa_com_caminho = mapa_prisao.copy()  # Cria uma cópia do mapa
+#         marcar_caminho(mapa_com_caminho, trecho)
+#         criar_mapa(mapa_com_caminho, f"Mapa do caminho de {ponto_inicial} até {ponto_final}")
+
+#     plt.show()  # Exibe todos os mapas ao final, e eles permanecerão abertos
+#     return caminho_completo, custo_total
+
+
 def encontrar_caminho(mapa_prisao, pontos):
     caminho_completo = {}
     custo_total = 0
     
-    # Itera sobre os pontos na ordem especificada
     for i in range(len(pontos) - 1):
         ponto_inicial = pontos[i]
         ponto_final = pontos[i + 1]
@@ -98,24 +164,89 @@ def encontrar_caminho(mapa_prisao, pontos):
         trecho, custo = a_estrela(mapa_prisao, ponto_inicial, ponto_final)
 
         # Adiciona o trecho ao caminho completo
-        # O trecho é um dicionário onde a chave é a célula atual e o valor é a célula anterior
         caminho_completo.update(trecho)
         custo_total += custo
         
+        # Marca o caminho e cria o mapa
+        mapa_com_caminho = mapa_prisao.copy()  # Cria uma cópia do mapa
+        marcar_caminho(mapa_com_caminho, trecho)
+        
+        # Aqui está a correção do título
+        titulo = f"Mapa do caminho de {ponto_inicial} até {ponto_final}"
+        criar_mapa(mapa_com_caminho, titulo)  # Agora está passando o título
+
+        # Printando os passos do caminho
+        print(f"Gerando mapa para o caminho de {ponto_inicial} até {ponto_final}")
+        for index, passo in enumerate(trecho.keys()):
+            print(f"Passo {index + 1}: {passo}")
+
+    plt.show()  # Exibe todos os mapas ao final
     return caminho_completo, custo_total
 
 
-# Plota a matriz do mapa como um heatmap usando matplotlib e seaborn, com cores personalizadas.
-def criar_mapa(mapa_prisao):
+
+# # Plota a matriz do mapa como um heatmap usando matplotlib e seaborn, com cores personalizadas.
+# def criar_mapa(mapa_prisao):
+#     # Definir o mapeamento de cores de acordo com os valores
+#     cores = ['yellow', '#7f7f7f', '#948a54', '#9bbb59','#d9d9d9', '#d9d9d9']  # cores para os valores
+#     cmap = ListedColormap(cores)
+
+#     # Definir os limites para o colorbar (cada limite corresponde a uma cor)
+#     norm = plt.Normalize(vmin= -1, vmax=10)  # Normaliza os valores de 0 a 10
+
+#     # Plota o mapa com o colormap personalizado
+#     plt.figure(figsize=(20, 20))  # Define o tamanho do gráfico
+#     sns.heatmap(mapa_prisao, 
+#                 cmap=cmap,
+#                 annot=True, 
+#                 cbar=False, 
+#                 square=True, 
+#                 linewidths=0.5, 
+#                 linecolor='black',
+#                 norm=norm, 
+#                 annot_kws={'fontsize': 7})  # Define os ticks do colorbar
+
+#     plt.title("Mapa da Prisão")
+#     plt.show()
+
+
+# def criar_mapa(mapa_prisao, titulo):
+#     # Definir o mapeamento de cores de acordo com os valores
+#     cores = ['yellow', '#7f7f7f', '#948a54', '#9bbb59','#d9d9d9', '#d9d9d9']  # cores para os valores
+#     cmap = ListedColormap(cores)
+
+#     # Definir os limites para o colorbar (cada limite corresponde a uma cor)
+#     norm = plt.Normalize(vmin=-1, vmax=10)  # Normaliza os valores de 0 a 10
+
+#     # Plota o mapa com o colormap personalizado
+#     plt.figure(figsize=(10, 10))  # Define o tamanho do gráfico
+#     sns.heatmap(mapa_prisao, 
+#                 cmap=cmap,
+#                 annot=True, 
+#                 cbar=False, 
+#                 square=True, 
+#                 linewidths=0.5, 
+#                 linecolor='black',
+#                 norm=norm, 
+#                 annot_kws={'fontsize': 7})  # Define os ticks do colorbar
+
+#     plt.title(titulo)
+#     plt.show(block=False)  # Gera o gráfico de forma não bloqueante
+#     plt.pause(2)  # Pausa para permitir a exibição
+#     plt.clf()  # Limpa a figura para o próximo mapa
+
+
+
+def criar_mapa(mapa_prisao, titulo):
     # Definir o mapeamento de cores de acordo com os valores
     cores = ['yellow', '#7f7f7f', '#948a54', '#9bbb59','#d9d9d9', '#d9d9d9']  # cores para os valores
     cmap = ListedColormap(cores)
 
     # Definir os limites para o colorbar (cada limite corresponde a uma cor)
-    norm = plt.Normalize(vmin= -1, vmax=10)  # Normaliza os valores de 0 a 10
+    norm = plt.Normalize(vmin=-1, vmax=10)  # Normaliza os valores de 0 a 10
 
     # Plota o mapa com o colormap personalizado
-    plt.figure(figsize=(20, 20))  # Define o tamanho do gráfico
+    plt.figure(figsize=(10, 10))  # Define o tamanho do gráfico
     sns.heatmap(mapa_prisao, 
                 cmap=cmap,
                 annot=True, 
@@ -126,8 +257,8 @@ def criar_mapa(mapa_prisao):
                 norm=norm, 
                 annot_kws={'fontsize': 7})  # Define os ticks do colorbar
 
-    plt.title("Mapa da Prisão")
-    plt.show()
+    plt.title(titulo)
+
 
 
 # Função para marcar o caminho no mapa
